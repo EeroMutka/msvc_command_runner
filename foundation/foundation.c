@@ -2355,24 +2355,47 @@ String str_from_cstring(const char* s) { return (String){(u8*)s, strlen(s)}; }
 		
 		// Windows expects a single space-separated string that encodes a list of the passed command-line arguments.
 		// In order to support spaces within an argument, we must enclose it with quotation marks (").
+		// This escaping method is the absolute dumbest thing that has ever existed.
 		// https://learn.microsoft.com/en-us/cpp/c-language/parsing-c-command-line-arguments?redirectedfrom=MSDN&view=msvc-170
-
+		// https://stackoverflow.com/questions/1291291/how-to-accept-command-line-args-ending-in-backslash
+		// https://daviddeley.com/autohotkey/parameters/parameters.htm#WINCRULESDOC
+		
 		String* arg_strings = args.data;
 		ArrayRaw cmd_string = make_array_raw(temp);
 
 		for (uint i = 0; i < args.len; i++) {
 			String arg = arg_strings[i];
 			
-			u8 quotation = '\"';
+			u8 quotation = '\"', backslash = '\\';
 			array_push_raw(&cmd_string, &quotation, 1);
 			
 			for (uint j = 0; j < arg.len; j++) {
-				if (arg.data[j] == '\"') {
-					array_push_raw(&cmd_string, &quotation, 1); // escape quotation mark with another quotation mark
+				if (arg.data[j] == quotation) {
+					array_push_raw(&cmd_string, &backslash, 1); // escape quotation marks with a backslash
 				}
+				else if (arg.data[j] == backslash) {
+					if (j + 1 == arg.len) {
+						// if we have a backslash and it's the last character in the string,
+						// we must push \\"
+						array_push_raw(&cmd_string, &backslash, 1);
+						array_push_raw(&cmd_string, &backslash, 1);
+						break;
+					}
+					else if (arg.data[j + 1] = quotation) {
+						// if we have a backslash and the next character is a quotation mark,
+						// we must push \\\"
+						array_push_raw(&cmd_string, &backslash, 1);
+						array_push_raw(&cmd_string, &backslash, 1);
+						array_push_raw(&cmd_string, &backslash, 1);
+						array_push_raw(&cmd_string, &quotation, 1);
+						j++; // also skip the next "
+						continue;
+					}
+				}
+				
 				array_push_raw(&cmd_string, &arg.data[j], 1);
 			}
-
+			
 			array_push_raw(&cmd_string, &quotation, 1);
 			
 			if (i < args.len - 1) array_push_raw(&cmd_string, &(u8){' '}, 1); // Separate each argument with a space
