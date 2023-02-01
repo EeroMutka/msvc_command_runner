@@ -2381,7 +2381,7 @@ String str_from_cstring(const char* s) { return (String){(u8*)s, strlen(s)}; }
 						array_push_raw(&cmd_string, &backslash, 1);
 						break;
 					}
-					else if (arg.data[j + 1] = quotation) {
+					else if (arg.data[j + 1] == quotation) {
 						// if we have a backslash and the next character is a quotation mark,
 						// we must push \\\"
 						array_push_raw(&cmd_string, &backslash, 1);
