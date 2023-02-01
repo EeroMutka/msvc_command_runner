@@ -53,10 +53,12 @@ int main(int argc, const char** argv) {
 	//	}
 	//	os_write_to_console_colored(LIT("\n---------------------------------------------------------\n"), ConsoleAttribute_Blue | ConsoleAttribute_Green);
 	//}
-
-	if (!os_run_command(msvc_args.slice, {})) {
+	
+	u32 exit_code;
+	if (!os_run_command(msvc_args.slice, {}, &exit_code)) {
+		printf("Failed to run the command!\n");
 		return 1;
 	}
-
-	return 0;
+	
+	return exit_code;
 }

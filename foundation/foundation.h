@@ -617,7 +617,8 @@ C_API void os_write_to_console_colored(String str, ConsoleAttributeFlags attribu
 // If `working_dir` is an empty string, the current working directory will be used.
 // `args[0]` should be the path of the executable, where `\' and `/` are both accepted path separators.
 // TODO: options to capture stdout and stderr
-C_API bool os_run_command(Slice(String) args, String working_dir);
+C_API bool os_run_command(Slice(String) args, String working_dir, u32* out_exit_code);
+//C_API bool os_run_command_no_wait(Slice(String) args, String working_dir);
 
 C_API bool os_set_working_dir(String dir);
 C_API String os_get_working_dir(Allocator* allocator);

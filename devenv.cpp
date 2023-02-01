@@ -16,9 +16,11 @@ int main(int argc, const char** argv) {
 		array_push(&args, str_from_cstring(argv[i]));
 	}
 	
-	if (!os_run_command(args.slice, {})) {
+	u32 exit_code;
+	if (!os_run_command(args.slice, {}, &exit_code)) {
+		printf("Failed to run the command!\n");
 		return 1;
 	}
 	
-	return 0;
+	return exit_code;
 }

@@ -2345,7 +2345,7 @@ String str_from_cstring(const char* s) { return (String){(u8*)s, strlen(s)}; }
 		}
 	}
 
-	bool os_run_command(SliceRaw args, String working_dir) {
+	bool os_run_command(SliceRaw args, String working_dir, u32* out_exit_code) {
 		Allocator* temp = temp_push();
 		String working_dir_before;
 		if (working_dir.len > 0) {
@@ -2448,7 +2448,12 @@ String str_from_cstring(const char* s) { return (String){(u8*)s, strlen(s)}; }
 			&startup_info,    // STARTUPINFO pointer 
 			&process_info     // receives PROCESS_INFORMATION 
 		)) goto end;
-
+		
+		// wait for the process to finish
+		WaitForSingleObject(process_info.hProcess, INFINITE);
+		
+		if (!GetExitCodeProcess(process_info.hProcess, (DWORD*)out_exit_code)) goto end;
+		
 		CloseHandle(process_info.hProcess);
 		CloseHandle(process_info.hThread);
 		
