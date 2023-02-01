@@ -6,6 +6,8 @@ mkdir build
 cd build
 
 cl "../where_is_my_msvc.cpp" "../foundation/foundation.c" /link Advapi32.lib Ole32.lib OleAut32.lib
+cl "../devenv.cpp" "../foundation/foundation.c" /link Advapi32.lib Ole32.lib OleAut32.lib
+cl "../msbuild.cpp" "../foundation/foundation.c" /link Advapi32.lib Ole32.lib OleAut32.lib
 cl "../dumpbin.cpp" "../foundation/foundation.c" /link Advapi32.lib Ole32.lib OleAut32.lib
 cl "../link.cpp" "../foundation/foundation.c" /link Advapi32.lib Ole32.lib OleAut32.lib
 cl "../lib.cpp" "../foundation/foundation.c" /link Advapi32.lib Ole32.lib OleAut32.lib

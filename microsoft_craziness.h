@@ -60,6 +60,7 @@ struct WinSDK_Find_Result {
     wchar_t *vs_exe_path = NULL;
     wchar_t *vs_library_path = NULL;
     wchar_t *vs_include_path = NULL; // @em
+    wchar_t *vs_base_path = NULL; // @em
 };
  
 static WinSDK_Find_Result WinSDK_find_visual_studio_and_windows_sdk();
@@ -72,6 +73,7 @@ static void WinSDK_free_resources(WinSDK_Find_Result *result) {
     free(result->vs_exe_path);
     free(result->vs_library_path);
     free(result->vs_include_path);
+    free(result->vs_base_path);
 }
  
 //
@@ -463,6 +465,7 @@ static bool WinSDK_find_visual_studio_2017_by_fighting_through_microsoft_crazine
  
         if (WinSDK_os_file_exists(library_file)) {
             auto link_exe_path = WinSDK_concat(bstr_inst_path, L"\\VC\\Tools\\MSVC\\", version, L"\\bin\\Hostx64\\x64");
+            result->vs_base_path = _wcsdup(bstr_inst_path);
             result->vs_exe_path     = link_exe_path;
             result->vs_library_path = library_path;
             result->vs_include_path = WinSDK_concat(bstr_inst_path, L"\\VC\\Tools\\MSVC\\", version, L"\\include");

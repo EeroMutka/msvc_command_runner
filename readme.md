@@ -15,6 +15,8 @@ Another solution is to use *MSVC Command Runner*! This project generates executa
  - `link.exe`
  - `lib.exe`
  - `dumpbin.exe`
+ - `msbuild.exe`
+ - `devenv.exe`
  - `ml64.exe`
  - Bonus: `where_is_my_msvc.exe`. This just prints out some directories showing where your windows SDK / visual studio installion is located.
 
