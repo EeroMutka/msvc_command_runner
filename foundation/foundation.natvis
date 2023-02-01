@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+	
+	<!--
+	Useful references:
+	
+	Expressions in the debugger - Format Specifiers in C++
+	https://msdn.microsoft.com/en-us/library/75w45ekt.aspx?f=255&MSPPError=-2147217396
+
+	Create custom views of native objects in the Visual Studio debugger 
+	https://docs.microsoft.com/en-us/visualstudio/debugger/create-custom-views-of-native-objects
+
+	-->
+	
+	<Type Name="Slice&lt;*&gt;">
+		<DisplayString>{{data={(void*)data}, len={len}}}</DisplayString>
+		<Expand>
+			<ArrayItems>
+			  <Size>len</Size>
+			  <ValuePointer>data</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+	
+	<!-- String -->
+	<Type Name="Slice&lt;unsigned char&gt;">
+		<DisplayString>{data,[len]s}</DisplayString>
+		<Expand>
+			<ArrayItems>
+			  <Size>len</Size>
+			  <ValuePointer>data</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+	
+	<Type Name="Array&lt;*&gt;">
+		<DisplayString>{{data={(void*)data}, len={len}, capacity={capacity}}}</DisplayString>
+		<Expand>
+			<ArrayItems>
+			  <Size>len</Size>
+			  <ValuePointer>data</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+	
+	<Type Name="Map&lt;*,*&gt;">
+		<Expand>
+			<CustomListItems MaxItemsPerView="5000">
+				<Variable Name="i" InitialValue="0" />
+				<Loop>
+					<Break Condition="i>=entries.len"/>
+					<Item Condition="entries.data[i].state == 2" Name="[{entries.data[i].key}]">entries.data[i].value</Item>
+					<Exec>i += 1</Exec>
+				</Loop>
+			</CustomListItems>
+		</Expand>
+	</Type>
+	
+	<Type Name="Map64&lt;*&gt;">
+		<Expand>
+			<CustomListItems MaxItemsPerView="5000">
+				<Variable Name="i" InitialValue="0" />
+				<Variable Name="key" InitialValue="(u64)0" />
+				
+				<Loop>
+					<Break Condition="i >= slot_count"/>
+					<Exec>key = *(u64*)((u8*)slots + i*(value_size + 8)) </Exec>
+					<Item Condition="!(key >= 0xFFFFFFFFFFFFFFFD)" Name="{key}">*($T1*)((u8*)slots + i*(value_size + 8) + 8)</Item>
+					
+					<Exec>i += 1</Exec>
+				</Loop>
+				
+			</CustomListItems>
+		</Expand>
+	</Type>
+
+	<Type Name="SlotArena&lt;*&gt;">
+		<Expand>
+			<CustomListItems MaxItemsPerView="5000">
+				<Variable Name="offset" InitialValue="8" />
+				<Variable Name="i" InitialValue="0" />
+				<Loop>
+					<Break Condition="offset >= arena.pos"/>
+					<Item Condition="*(void**)(arena.mem + offset - 8) == 0" Name="[{i}]">($T1*)(arena.mem + offset)</Item>
+					<Exec>offset += elem_size + 8</Exec>
+					<Exec Condition="true">i += 1</Exec>
+				</Loop>
+			</CustomListItems>
+		</Expand>
+	</Type>
+	
+</AutoVisualizer>
