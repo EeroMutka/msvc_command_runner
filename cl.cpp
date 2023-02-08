@@ -14,6 +14,8 @@ int main(int argc, const char** argv) {
 	String vs_library_path = str_from_utf16(windows_sdk.vs_library_path, a); // contains MSVCRT.lib etc
 	String vs_include_path = str_from_utf16(windows_sdk.vs_include_path, a); // contains vcruntime.h
 	
+	//printf("windows_sdk_um include path"
+	
 	// https://learn.microsoft.com/en-us/cpp/build/reference/compiler-command-line-syntax?view=msvc-170
 
 	Slice<String> args = make_slice_garbage<String>(argc - 1, a);
@@ -31,7 +33,9 @@ int main(int argc, const char** argv) {
 
 	Array<String> msvc_args = make_array<String>(a);
 	array_push(&msvc_args, STR_JOIN(a, msvc_directory, LIT("\\cl.exe")));
+	array_push(&msvc_args, STR_JOIN(a, LIT("/I"), windows_sdk_include_base_path, LIT("\\shared")));
 	array_push(&msvc_args, STR_JOIN(a, LIT("/I"), windows_sdk_include_base_path, LIT("\\ucrt")));
+	array_push(&msvc_args, STR_JOIN(a, LIT("/I"), windows_sdk_include_base_path, LIT("\\um")));
 	array_push(&msvc_args, STR_JOIN(a, LIT("/I"), vs_include_path));
 
 	for (uint i = 0; i < cl_args.len; i++) {
