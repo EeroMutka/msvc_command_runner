@@ -1,7 +1,7 @@
 
 # MSVC Command Runner
 
-You're on your way to make some cool new programming project, and you need to build or link some code on windows. How do you do this? Microsoft tells you to launch the X64 Native Tools Command Prompt for Visual Studio XXX, then cd your way into the correct directory, and call `cl.exe` on your source code files. It would be *sooo boring* if you could just call `cl.exe` from a normal command line...
+You're on your way to make some cool new programming project, and you need to build or link some C/C++ code on windows. How do you do this? Microsoft tells you to launch the X64 Native Tools Command Prompt for Visual Studio XXX, then cd your way into the correct directory, and call `cl.exe` on your source code files. It would be *sooo boring* if you could just call `cl.exe` from a normal command line...
 
 This is very frustrating, especially if you just want to quickly open *cmd* at some directory by typing "cmd" to the address bar in your windows explorer to build some code, or if you want to setup some other tool like VSCode to build your code.
 
