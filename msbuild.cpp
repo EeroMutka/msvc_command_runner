@@ -5,7 +5,6 @@ int main(int argc, const char** argv) {
 	Allocator* a = temp_push();
 
 	os_write_to_console_colored(LIT("-------- Running MSBuild.exe from msvc_command_runner --------\n"), ConsoleAttribute_Blue | ConsoleAttribute_Green);
-	printf("msvc_command_runner: startinggggg\n");
 	
 	WinSDK_Find_Result windows_sdk = WinSDK_find_visual_studio_and_windows_sdk();
 	String vs_base_path = str_from_utf16(windows_sdk.vs_base_path, a);
