@@ -10,7 +10,7 @@ int main(int argc, const char** argv) {
 	String vs_base_path = str_from_utf16(windows_sdk.vs_base_path, a);
 	
 	Array<String> args = make_array<String>(a);
-	array_push(&args, STR_JOIN(a, vs_base_path, LIT("\\MSBuild\\Current\\Bin\\MSBuild.exe")));
+	array_push(&args, STR_JOIN(a, vs_base_path, LIT("\\MSBuild\\Current\\Bin\\amd64\\MSBuild.exe")));
 	
 	for (uint i = 1; i < argc; i++) {
 		array_push(&args, str_from_cstring(argv[i]));
